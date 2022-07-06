@@ -5,7 +5,7 @@
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>995,2104</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>995,2255</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>GetNextHoliday_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <scg:List x:TypeArguments="x:String" Capacity="26">
@@ -65,12 +65,13 @@
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Other possible solution:&#xD;&#xA;1. HTTP Request&#xD;&#xA;2. Deserialize JSON&#xD;&#xA;3. Arrign JSON to an array arrHolidays&#xD;&#xA;4. Filter the array using variable nextHoliday  = arrHolidays.AsEnumerable().Where(Function (a) &gt; &quot;2022-07-01&quot;).ToArray.First  &#xD;&#xA;5. Return as an output argument" DisplayName="GetNextHoliday" sap:VirtualizedContainerService.HintSize="641,1899" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Other possible solution:&#xA;1. HTTP Request&#xA;2. Deserialize JSON&#xA;3. Arrign JSON to an array arrHolidays&#xA;4. Filter the array using variable nextHoliday  = arrHolidays.AsEnumerable().Where(Function (a) &gt; &quot;2022-07-01&quot;).ToArray.First  &#xA;5. Return result as an output parameter" DisplayName="GetNextHoliday" sap:VirtualizedContainerService.HintSize="641,2090" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="s:DateTime" Name="currentDate" />
       <Variable x:TypeArguments="x:String" Name="strBankHolidays" />
       <Variable x:TypeArguments="njl:JObject" Name="jsonBankHolidays" />
       <Variable x:TypeArguments="x:String" Name="strResponse" />
+      <Variable x:TypeArguments="x:String" Name="jsonFile" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -79,7 +80,37 @@
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
     <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="599,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot; GetNextHoliday started&quot;]" />
-    <ui:HttpClient Body="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" Password="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" Username="{x:Null}" AcceptFormat="ANY" BodyFormat="application/xml" ClientCertificate="[Nothing]" ClientCertificatePassword="[Nothing]" DisplayName="HTTP Request" EndPoint="https://www.gov.uk/bank-holidays.json" sap:VirtualizedContainerService.HintSize="599,22" sap2010:WorkflowViewState.IdRef="HttpClient_1" Method="GET" ResourcePath="C:\Users\borislava\Documents\UiPath\Adobe\BankHolidays.json" Result="[strResponse]" TimeoutMS="60000">
+    <Assign sap:VirtualizedContainerService.HintSize="599,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[jsonFile]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">json/BankHolidays.json</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="599,51" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="526,371" sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <If Condition="[not Directory.Exists(&quot;json/BankHolidays.json&quot;)]" sap:VirtualizedContainerService.HintSize="484,279" sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Then>
+              <ui:CreateFile ContinueOnError="{x:Null}" DisplayName="Create File" sap:VirtualizedContainerService.HintSize="334,132" sap2010:WorkflowViewState.IdRef="CreateFile_1" Name="BankHolidays.json" Path="json" />
+            </If.Then>
+          </If>
+        </Sequence>
+      </ui:CommentOut.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CommentOut>
+    <ui:HttpClient Body="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" Password="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" Username="{x:Null}" AcceptFormat="ANY" BodyFormat="application/xml" ClientCertificate="[Nothing]" ClientCertificatePassword="[Nothing]" DisplayName="HTTP Request" EndPoint="https://www.gov.uk/bank-holidays.json" sap:VirtualizedContainerService.HintSize="599,22" sap2010:WorkflowViewState.IdRef="HttpClient_1" Method="GET" ResourcePath="[jsonFile]" Result="[strResponse]" TimeoutMS="60000">
       <ui:HttpClient.Attachments>
         <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
       </ui:HttpClient.Attachments>
@@ -97,7 +128,7 @@
       </ui:HttpClient.UrlSegments>
     </ui:HttpClient>
     <ui:Comment sap:VirtualizedContainerService.HintSize="599,74" sap2010:WorkflowViewState.IdRef="Comment_1" Text="// Here we can check if response code = 0 and exit the workflow" />
-    <ui:ReadTextFile Content="[strBankHolidays]" DisplayName="Read Text File" FileName="json\BankHolidays.json" sap:VirtualizedContainerService.HintSize="599,79" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
+    <ui:ReadTextFile Content="[strBankHolidays]" DisplayName="Read Text File" FileName="[jsonFile]" sap:VirtualizedContainerService.HintSize="599,79" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
     <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize JSON" sap:VirtualizedContainerService.HintSize="599,60" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_1" JsonObject="[jsonBankHolidays]" JsonString="[strBankHolidays]" />
     <Assign sap:VirtualizedContainerService.HintSize="599,60" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
