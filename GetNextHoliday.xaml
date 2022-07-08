@@ -5,10 +5,10 @@
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>995,2255</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>994,2780.66666666667</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>GetNextHoliday_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="26">
+    <scg:List x:TypeArguments="x:String" Capacity="52">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -35,10 +35,14 @@
       <x:String>System.Globalization</x:String>
       <x:String>Newtonsoft.Json.Linq</x:String>
       <x:String>Newtonsoft.Json</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="24">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="48">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -63,15 +67,19 @@
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Other possible solution:&#xA;1. HTTP Request&#xA;2. Deserialize JSON&#xA;3. Arrign JSON to an array arrHolidays&#xA;4. Filter the array using variable nextHoliday  = arrHolidays.AsEnumerable().Where(Function (a) &gt; &quot;2022-07-01&quot;).ToArray.First  &#xA;5. Return result as an output parameter" DisplayName="GetNextHoliday" sap:VirtualizedContainerService.HintSize="641,2090" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Other possible solution:&#xA;1. HTTP Request&#xA;2. Deserialize JSON&#xA;3. Arrign JSON to an array arrHolidays&#xA;4. Filter the array using variable nextHoliday  = arrHolidays.AsEnumerable().Where(Function (a) &gt; &quot;2022-07-01&quot;).ToArray.First  &#xA;5. Return result as an output parameter" DisplayName="GetNextHoliday" sap:VirtualizedContainerService.HintSize="604.666666666667,2716" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="s:DateTime" Name="currentDate" />
       <Variable x:TypeArguments="x:String" Name="strBankHolidays" />
       <Variable x:TypeArguments="njl:JObject" Name="jsonBankHolidays" />
       <Variable x:TypeArguments="x:String" Name="strResponse" />
       <Variable x:TypeArguments="x:String" Name="jsonFile" />
+      <Variable x:TypeArguments="x:String" Name="jsonFolder" />
+      <Variable x:TypeArguments="x:String" Name="jsonFilePath" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -79,38 +87,44 @@
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="599,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot; GetNextHoliday started&quot;]" />
-    <Assign sap:VirtualizedContainerService.HintSize="599,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="562.666666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;GetNextHoliday started&quot;]" />
+    <Assign DisplayName="Assign folder" sap:VirtualizedContainerService.HintSize="562.666666666667,62" sap2010:WorkflowViewState.IdRef="Assign_5">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[jsonFile]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">json/BankHolidays.json</InArgument>
+        <InArgument x:TypeArguments="x:String">BankHolidays.json</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="599,51" sap2010:WorkflowViewState.IdRef="CommentOut_2">
-      <ui:CommentOut.Body>
-        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="526,371" sap2010:WorkflowViewState.IdRef="Sequence_5">
+    <Assign DisplayName="Assign folder" sap:VirtualizedContainerService.HintSize="562.666666666667,62" sap2010:WorkflowViewState.IdRef="Assign_6">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[jsonFolder]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">json</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign file " sap:VirtualizedContainerService.HintSize="562.666666666667,62" sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[jsonFilePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[Path.Combine (jsonFolder, jsonFile)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[not Directory.Exists(jsonFolder)]" sap:VirtualizedContainerService.HintSize="562.666666666667,357.333333333333" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <Sequence sap:VirtualizedContainerService.HintSize="376,172.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_6">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <If Condition="[not Directory.Exists(&quot;json/BankHolidays.json&quot;)]" sap:VirtualizedContainerService.HintSize="484,279" sap2010:WorkflowViewState.IdRef="If_2">
-            <If.Then>
-              <ui:CreateFile ContinueOnError="{x:Null}" DisplayName="Create File" sap:VirtualizedContainerService.HintSize="334,132" sap2010:WorkflowViewState.IdRef="CreateFile_1" Name="BankHolidays.json" Path="json" />
-            </If.Then>
-          </If>
+          <ui:CreateDirectory ContinueOnError="{x:Null}" DisplayName="Create Folder" sap:VirtualizedContainerService.HintSize="334,80.6666666666667" sap2010:WorkflowViewState.IdRef="CreateDirectory_1" Path="[jsonFolder]" />
         </Sequence>
-      </ui:CommentOut.Body>
-      <sap:WorkflowViewStateService.ViewState>
-        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-        </scg:Dictionary>
-      </sap:WorkflowViewStateService.ViewState>
-    </ui:CommentOut>
-    <ui:HttpClient Body="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" Password="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" Username="{x:Null}" AcceptFormat="ANY" BodyFormat="application/xml" ClientCertificate="[Nothing]" ClientCertificatePassword="[Nothing]" DisplayName="HTTP Request" EndPoint="https://www.gov.uk/bank-holidays.json" sap:VirtualizedContainerService.HintSize="599,22" sap2010:WorkflowViewState.IdRef="HttpClient_1" Method="GET" ResourcePath="[jsonFile]" Result="[strResponse]" TimeoutMS="60000">
+      </If.Then>
+    </If>
+    <ui:HttpClient Body="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" Password="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" Username="{x:Null}" AcceptFormat="ANY" BodyFormat="application/xml" ClientCertificate="[Nothing]" ClientCertificatePassword="[Nothing]" DisplayName="HTTP Request" EndPoint="https://www.gov.uk/bank-holidays.json" sap:VirtualizedContainerService.HintSize="562.666666666667,22" sap2010:WorkflowViewState.IdRef="HttpClient_1" Method="GET" ResourcePath="[jsonFilePath]" Result="[strResponse]" TimeoutMS="60000">
       <ui:HttpClient.Attachments>
         <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
       </ui:HttpClient.Attachments>
@@ -127,10 +141,10 @@
         <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
       </ui:HttpClient.UrlSegments>
     </ui:HttpClient>
-    <ui:Comment sap:VirtualizedContainerService.HintSize="599,74" sap2010:WorkflowViewState.IdRef="Comment_1" Text="// Here we can check if response code = 0 and exit the workflow" />
-    <ui:ReadTextFile Content="[strBankHolidays]" DisplayName="Read Text File" FileName="[jsonFile]" sap:VirtualizedContainerService.HintSize="599,79" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
-    <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize JSON" sap:VirtualizedContainerService.HintSize="599,60" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_1" JsonObject="[jsonBankHolidays]" JsonString="[strBankHolidays]" />
-    <Assign sap:VirtualizedContainerService.HintSize="599,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+    <ui:Comment sap:VirtualizedContainerService.HintSize="562.666666666667,74.6666666666667" sap2010:WorkflowViewState.IdRef="Comment_1" Text="// Here we can check if response code = 0 and exit the workflow" />
+    <ui:ReadTextFile Content="[strBankHolidays]" DisplayName="Read Text File" FileName="[jsonFilePath]" sap:VirtualizedContainerService.HintSize="562.666666666667,80.6666666666667" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
+    <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize JSON" sap:VirtualizedContainerService.HintSize="562.666666666667,62" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_1" JsonObject="[jsonBankHolidays]" JsonString="[strBankHolidays]" />
+    <Assign DisplayName="Assign current date" sap:VirtualizedContainerService.HintSize="562.666666666667,62" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="s:DateTime">[currentDate]</OutArgument>
       </Assign.To>
@@ -138,13 +152,13 @@
         <InArgument x:TypeArguments="s:DateTime">[DateTime.ParseExact("2022-07-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:ForEach x:TypeArguments="njl:JObject" CurrentIndex="{x:Null}" DisplayName="For Each" sap:VirtualizedContainerService.HintSize="599,933" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[jsonBankHolidays.Item(&quot;england-and-wales&quot;).Item(&quot;events&quot;)]">
+    <ui:ForEach x:TypeArguments="njl:JObject" CurrentIndex="{x:Null}" DisplayName="For Each" sap:VirtualizedContainerService.HintSize="562.666666666667,1021.33333333333" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[jsonBankHolidays.Item(&quot;england-and-wales&quot;).Item(&quot;events&quot;)]">
       <ui:ForEach.Body>
         <ActivityAction x:TypeArguments="njl:JObject">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="njl:JObject" Name="item" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="563,799" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="526,882.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_2">
             <Sequence.Variables>
               <Variable x:TypeArguments="s:DateTime" Name="holidayDate" />
             </Sequence.Variables>
@@ -153,8 +167,8 @@
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <ui:Comment sap:VirtualizedContainerService.HintSize="521,74" sap2010:WorkflowViewState.IdRef="Comment_3" Text="// Here we can use Try Catch to check the correct format" />
-            <Assign DisplayName="Assign holiday date" sap:VirtualizedContainerService.HintSize="521,60" sap2010:WorkflowViewState.IdRef="Assign_2">
+            <ui:Comment sap:VirtualizedContainerService.HintSize="484,113.333333333333" sap2010:WorkflowViewState.IdRef="Comment_3" Text="// Try Catch can be used for parsing dates but in this case it is not necessary. Here dates are supposed to be in a correct format as this is a public API " />
+            <Assign DisplayName="Assign holiday date" sap:VirtualizedContainerService.HintSize="484,62" sap2010:WorkflowViewState.IdRef="Assign_2">
               <Assign.To>
                 <OutArgument x:TypeArguments="s:DateTime">[holidayDate]</OutArgument>
               </Assign.To>
@@ -162,16 +176,16 @@
                 <InArgument x:TypeArguments="s:DateTime">[DateTime.ParseExact(item("date").ToString, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)]</InArgument>
               </Assign.Value>
             </Assign>
-            <If Condition="[holidayDate &gt; currentDate]" DisplayName="If holidayDate &gt; currentDate" sap:VirtualizedContainerService.HintSize="521,493" sap2010:WorkflowViewState.IdRef="If_1">
+            <If Condition="[holidayDate &gt; currentDate]" DisplayName="If holidayDate &gt; currentDate" sap:VirtualizedContainerService.HintSize="484,535.333333333333" sap2010:WorkflowViewState.IdRef="If_1">
               <If.Then>
-                <Sequence DisplayName="Return next holiday date  " sap:VirtualizedContainerService.HintSize="376,345" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <Sequence DisplayName="Return next holiday date  " sap:VirtualizedContainerService.HintSize="376,350.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_3">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
-                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[item(&quot;title&quot;).ToString + “ ” + holidayDate.ToString(&quot;MM/dd/yyyy”)]" />
-                  <Assign DisplayName="Assign  next holiday date" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[item(&quot;title&quot;).ToString + “ ” + holidayDate.ToString(&quot;MM/dd/yyyy”)]" />
+                  <Assign DisplayName="Assign  next holiday date" sap:VirtualizedContainerService.HintSize="334,62" sap2010:WorkflowViewState.IdRef="Assign_3">
                     <Assign.To>
                       <OutArgument x:TypeArguments="x:String">[argNextBankHoliday]</OutArgument>
                     </Assign.To>
@@ -187,6 +201,6 @@
         </ActivityAction>
       </ui:ForEach.Body>
     </ui:ForEach>
-    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="599,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;GetNextHoliday ended&quot;]" />
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="562.666666666667,94.6666666666667" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;GetNextHoliday ended&quot;]" />
   </Sequence>
 </Activity>
