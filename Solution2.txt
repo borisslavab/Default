@@ -1,0 +1,6 @@
+Solution 2:
+1. HTTP Request
+2. Deserialize JSON
+3. Arrign JSON to an array arrHolidays
+4. Filter the array using variable nextHoliday  = arrHolidays.AsEnumerable().Where(Function (a) > "2022-07-01").ToArray.First  
+5. Return result as an output parameter
